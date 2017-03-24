@@ -129,13 +129,11 @@ class Game(Frame):
         # currentRoom is the room we're currently in. It can be any of the four
         # this needs to be global since it's changed in the main part of the program
         global currentRoom
-
+        # add gifs later - Santiago
         r1 = Room("Room 1")
         r2 = Room("Room 2")
         r3 = Room("Room 3")
         r4 = Room("Room 4")
-
-
         # adds exits to room 1
         r1.addExit("east", r2) # to the east of room 1 is room 2
         r1.addExit("south", r3)
@@ -147,7 +145,6 @@ class Game(Frame):
         r1.addItem("window", "The window is shattered, and there are shards of glass on the floor. This is how you got into the house.")
         r1.addItem("chair", "It's a chair. It's timeworn and ripped on one side, but looks comfy nonetheless.")
         r1.addItem("table", "It appears to be made of mahogany. A brass key lays on it, close to the left edge as though tossed there carelessly.")
-
         #add exits to room 2
         r2.addExit("west", r1)
         r2.addExit("south", r4)
@@ -155,7 +152,6 @@ class Game(Frame):
         r2.addItem("rug", "It looks like one of those Persian rugs your grandmother has. One of the edges has rolled up. You think you see something underneath.")
         # there will be a trapdoor under the rug. Add input so that rug can be removed
         r2.addItem("fireplace", "It's a stone fireplace, with nothing but ashes in it. There is currently no fire lit.")
-
         #add exit to room 3
         r3.addExit("north", r1)
         r3.addExit("east", r4)
@@ -168,7 +164,6 @@ class Game(Frame):
         r3.addItem("statue", "You're unsure whether it's supposed to be a Greek bust, or if something knocked its head off.")
         r3.addItem("desk", "A faded red journal rests upon the mahogany surface.") # there should be a read option, so that you can gaze upon cryptic recipes for beer.
         # took readable and moved it down, so that you can't read the journal before picking it up - Santiago
-
         # adds exits to room 4
         r4.addExit("north", r2)
         r4.addExit("west", r3)
@@ -182,41 +177,22 @@ class Game(Frame):
         r4.addItem("ladder", "It's a metal ladder, bolted to the left wall.")
         r4.addItem("window", "It's an open window on the far side of the room. You should really watch your step.")
 
-        currentRoom = r1
+        Game.currentRoom = r1 # changed this and inventory - Santiago
+        Game.inventory = [] # inventory is now here - Santiago
+    def setupGUI(self): # - Santiago
+        #organize the GUI
+        self.pack(fill=BOTH, expand=1)
+        #setup the player input at the bottom of the GUI
+        #widget is a Tkinter Entry
+        #background is white; bind return key to function process in class
+        Game.player_input = Entry(self, bg="white")
+        Game.player_input.bind("<Return>", self.process)
+        Game.player_input.pack(side=BOTTOM, fill=X)
+        Game.player_input.focus()
+   # ending here for now     - Santiago
  
-# displays an appropriate "message" when the player dies
-# yes, this is intentionally obfuscated!
-def death():
-    print " " * 17 + "u" * 7
-    print " " * 13 + "u" * 2 + "$" * 11 + "u" * 2
-    print " " * 10 + "u" * 2 + "$" * 17 + "u" * 2
-    print " " * 9 + "u" + "$" * 21 + "u"
-    print " " * 8 + "u" + "$" * 23 + "u"
-    print " " * 7 + "u" + "$" * 25 + "u"
-    print " " * 7 + "u" + "$" * 25 + "u"
-    print " " * 7 + "u" + "$" * 6 + "\"" + " " * 3 + "\"" + "$" * 3 + "\"" + " " * 3 + "\"" + "$" * 6 + "u"
-    print " " * 7 + "\"" + "$" * 4 + "\"" + " " * 6 + "u$u" + " " * 7 + "$" * 4 + "\""
-    print " " * 8 + "$" * 3 + "u" + " " * 7 + "u$u" + " " * 7 + "u" + "$" * 3
-    print " " * 8 + "$" * 3 + "u" + " " * 6 + "u" + "$" * 3 + "u" + " " * 6 + "u" + "$" * 3
-    print " " * 9 + "\"" + "$" * 4 + "u" * 2 + "$" * 3 + " " * 3 + "$" * 3 + "u" * 2 + "$" * 4 + "\""
-    print " " * 10 + "\"" + "$" * 7 + "\"" + " " * 3 + "\"" + "$" * 7 + "\""
-    print " " * 12 + "u" + "$" * 7 + "u" + "$" * 7 + "u"
-    print " " * 13 + "u$\"$\"$\"$\"$\"$\"$u"
-    print " " * 2 + "u" * 3 + " " * 8 + "$" * 2 + "u$ $ $ $ $u" + "$" * 2 + " " * 7 + "u" * 3
-    print " u" + "$" * 4 + " " * 8 + "$" * 5 + "u$u$u" + "$" * 3 + " " * 7 + "u" + "$" * 4
-    print " " * 2 + "$" * 5 + "u" * 2 + " " * 6 + "\"" + "$" * 9 + "\"" + " " * 5 + "u" * 2 + "$" * 6
-    print "u" + "$" * 11 + "u" * 2 + " " * 4 + "\"" * 5 + " " * 4 + "u" * 4 + "$" * 10
-    print "$" * 4 + "\"" * 3 + "$" * 10 + "u" * 3 + " " * 3 + "u" * 2 + "$" * 9 + "\"" * 3 + "$" * 3 + "\""
-    print " " + "\"" * 3 + " " * 6 + "\"" * 2 + "$" * 11 + "u" * 2 + " " + "\"" * 2 + "$" + "\"" * 3
-    print " " * 11 + "u" * 4 + " \"\"" + "$" * 10 + "u" * 3
-    print " " * 2 + "u" + "$" * 3 + "u" * 3 + "$" * 9 + "u" * 2 + " \"\"" + "$" * 11 + "u" * 3 + "$" * 3
-    print " " * 2 + "$" * 10 + "\"" * 4 + " " * 11 + "\"\"" + "$" * 11 + "\""
-    print " " * 3 + "\"" + "$" * 5 + "\"" + " " * 22 + "\"\"" + "$" * 4 + "\"\""
-    print " " * 5 + "$" * 3 + "\"" + " " * 25 + "$" * 4 + "\""
-
 ###########################################################################################
 # go!
-inventory = [] # we don't have anything yet
 createRooms() # create the rooms
 
 #play forever or until player dies or quits
@@ -227,25 +203,6 @@ while(True):
     # if current room is none, player is dead
     if (currentRoom == None):
         status = "You've met with a terrible fate, haven't you? "
-    if (currentRoom == r11):
-        status = "You've made it out of Dr. Gourd's house with the 6-pack of the experimental brew. The party shall go on."
-        badwin() #displays some text that says you've won -Aguillard
-        action = raw_input("Try again? (yes or no) ")
-        if (action == "yes"):
-            # starts you over
-            inventory = []
-            createRooms()
-            status = "{}\nYou are carrying : {}\n".format(currentRoom, inventory)
-            print "================================"
-            print status
-        elif (action == "no"):
-            break
-        else:
-            break
-    if(currentRoom == r15):
-        status = "You've made it out of Dr. Gourd's house with the 6-pack of the experimental brew. The party shall go on."
-        win()
-        action = raw_input("Try again? (yes or no) ")
         if (action == "yes"):
             # starts you over
             inventory = []
