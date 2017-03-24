@@ -1,5 +1,5 @@
 ###########################################################################################
-# Name: 
+# Name: Andre Aguillard and Sam Santiago
 # Date: 
 # Description: 
 ###########################################################################################
@@ -114,15 +114,19 @@ class Game(Frame):
 
 	# creates the rooms
 	def createRooms(self):
+		pass
 
 	# sets up the GUI
 	def setupGUI(self):
+		pass
 
 	# sets the current room image
 	def setRoomImage(self):
+		pass
 
 	# sets the status displayed on the right of the GUI
 	def setStatus(self, status):
+		pass
 
 	# plays the game
 	def play(self):
@@ -137,6 +141,7 @@ class Game(Frame):
 
 	# processes the player's input
 	def process(self, event):
+		pass
 
 ##########################################################
 # the default size of the GUI is 800x600
