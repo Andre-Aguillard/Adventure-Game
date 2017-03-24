@@ -10,7 +10,7 @@ from Tkinter import *
 # NEED TO EDIT TO FULLY IMPLEMENT DICTIONARIES - SANTIAGO
 class Room(object):
     # constructor
-    def __init__(self, name):
+    def __init__(self, name, image):
         # rooms have a name, exits (e.g. south), exit locations (e.g. to the south is room n),
         # items (e.g. table), item descriptions (for each item), and grabbables (things that can
         # be taken into inventory)
@@ -33,10 +33,12 @@ class Room(object):
     @name.setter
     def name(self, value):
         self._name = value
+        
     # image getter   
     @property
     def image(self):
         returnself._image
+        
     # image getter
     @image.setter
     def image(self, value):
@@ -179,6 +181,7 @@ class Game(Frame):
 
         Game.currentRoom = r1 # changed this and inventory - Santiago
         Game.inventory = [] # inventory is now here - Santiago
+        
     def setupGUI(self): # - Santiago
         #organize the GUI
         self.pack(fill=BOTH, expand=1)
@@ -189,140 +192,148 @@ class Game(Frame):
         Game.player_input.bind("<Return>", self.process)
         Game.player_input.pack(side=BOTTOM, fill=X)
         Game.player_input.focus()
-   # ending here for now     - Santiago
- 
-###########################################################################################
-# go!
-createRooms() # create the rooms
-
-#play forever or until player dies or quits
-while(True):
-    # set the status so player has situational awareness
-    status = "{}\nYou are carrying : {}\n".format(currentRoom, inventory)
-
-    # if current room is none, player is dead
-    if (currentRoom == None):
-        status = "You've met with a terrible fate, haven't you? "
-        if (action == "yes"):
-            # starts you over
-            inventory = []
-            createRooms()
-            status = "{}\nYou are carrying : {}\n".format(currentRoom, inventory)
-            print "================================"
-            print status
-        elif (action == "no"):
-            break
-        else:
-            break
         
-    # this only happens if player goes south in room 4
-    # edit: or, if you exit through the window in room 1. It quits the game.
-    # display the status
-    
-    print "================================"
-    print status
-    print "Type 'help me' if needed"
-    print " "
-    # exit game
-    # Santiago: I changed the code here so that if you die, you can just
-    # start over with nothing, all the way back in room 1
-    # by regenerating everything, I don't have to reset lists and stuff :p
-    if (currentRoom == None):
-        death() # calls the death function, cause if you quit you die, it's just one of those thing that happens -Aguillard
-        action = raw_input("Try again? ")
-        if (action == "yes"):
-            # starts you over
-            inventory = []
-            createRooms()
-            status = "{}\nYou are carrying : {}\n".format(currentRoom, inventory)
-            print "Type 'Help me' to get help." # add a function to bring up key words and objective at any time - Santiago
-            print "================================"
-            print status
-        elif (action == "no"):
-            # quits the game; breaks
-            break
+        # setup image to the left of GUI
+        # widget is a Tkinter label
+        # don't let image control width's size
+        img = None
+        Game.image = Label(self, width=WIDTH / 2, image = img)
+        Game.image.image = img
+        Game.image.pack(side=LEFT, fill=Y)
+        Game.image.pack_propagate(False)
+        
+        # setup text to right of GUI
+        # first, place frame where the text will be displayed
+        text_frame = Frame(self, width=WIDTH / 2)
+        # widget - same deal as above
+        # disable by default
+        # don't let it control frame's size
+        Game.text = Text(text_frame, bg="lightgrey", state=DISABLED)
+        Game.text.pack(fill=Y, expand=1)
+        text_frame.pack(side=RIGHT, fill=Y)
+        text_frame.pack_propagate(False)
+        
+    def setRoomImage(self): # - Santiago
+        if (Game.currentRoom == None):
+            # if dead, SKULL
+            Game.img = PhotoImage(file="skull.gif")
         else:
-            break
-
-    #prompt for player input
-    # the game supports a simple language of <verb>, <noun>
-    # valid verbs are go, look, and take
-    # Santiago: I should add use... cross that bridge when I get to it
-    # man, I could add a lot of actions here...
-    # valid nouns depend the verb
-    # use raw_input here to treat the input as a string instead of an expression
-    action = raw_input("What to do? ")
-
-    # set the user's input to lowercase to make it easier to compare
-    # the verb and noun to known values
-    action = action.lower()
-
-    # exit the game if the player wants to leave (supports quit, exit, and bye)
-    if (action == "quit" or action == "bye" or action == "exit"):
-        break
-    # set default response
-    response = "I'm afraid I don't understand. Try <verb, noun>. Valid verbs are go, look, take, kick, open, use, and read." # will add 'use' at some point # and 'read', for the book
-    #split unser input into words
-    words = action.split()
-    # the game only understands two user inputs
-    # if you see any response = " ", leave it. It's just to hold a place instead of printing the default response. - Santiago
-    if (len(words) == 2):
-        verb = words[0]
-        noun = words[1]
-        # verb is go
-        if (verb == "go"):
-            response = "Invalid exit."
-            # check for valid exits
-            # this works now
-            for i in range(len(currentRoom.exits)):
-                # a valid exit is found
-                if (noun == currentRoom.exits[i]):
+            Game.img = PhotoImage(file=Game.currentRoom.image)
+        # display image to left
+        Game.image.config(image=Game.img)
+        Game.image.image = Game.img
+    
+    #sets the status displayed on right of GUI
+    def setStatus(self, status):
+        # enable text widget, clear it, set it, disable it
+        Game.text.config(state=NORMAL)
+        Game.text.delete("1.0", END)
+        if (Game.currentRoom == None):
+            # if dead, let player know
+            Game.text.insert(END, "You've met with a terrible fate, haven't you? \n")
+        else:
+            # display appropriate status
+            Game.text.insert(END, str(Game.currentRoom) +\
+                             "\nYou are carrying: " + str(Game.inventory) +\
+                             "\n\n" + status)
+            Game.text.config(state=DISABLED)
+    # plays the game - Santiago
+    def play(self):
+        # add rooms to the game
+        self.createRooms()
+        # configure GUI
+        self.setupGUI()
+        #set current room
+        self.setRoomImage()
+        # set the current status
+        self.setStatus("")
+           
+    # processes the player's input
+    def process(self, event): # - Santiago
+        # grab player's input from bottom of GUI
+        action = Game.player_input.get()
+        # set user's input to lowercase to make it easier
+        # to compare verb and noun to known values
+        action = action.lower()
+        # default response
+        response = "I don't understand. Try the format <verb> <noun>. Valid verbs are go, look, and take."
+        
+        # exit the game if player wants to leave
+        # supports quit, exit, and bye, felicia
+        if (action == "quit" or action == "exit" or action == "bye"):
+            exit(0)
+        
+        # if player is dead if they went south from room 4 or west from room 1
+        if (Game.currentRoom == None):
+            # clear input
+            Game.player_input.delete(0, END)
+            return
+        
+        # split user input into words and store words in a list
+        words = action.split()
+        
+        # game only understands two-word inputs
+        if (len(words) == 2):
+            verb = words[0]
+            noun = words[1]
+            
+            # verb is: go
+            if (verb == "go"):
+                response = "Invalid exit."
+                # check for valid exits
+                if (noun in Game.currentRoom.exits):
                     #change room to one associated with specific exit
-                    currentRoom = currentRoom.exitLocations[i]
-                    response = "You have entered another room." # changed speech a little bit
-                    if(currentRoom == r11 or currentRoom == r15): # for the ends - Santiago
-                        response = "You've made it out of Gourd's house."
-                        print " "
-                    break
-        # verb is look
-        # look works perfectly.
-        elif (verb == "look"):
-            response = "There's nothing like that here."
-            for i in range(len(currentRoom.items)):
-                if (noun == currentRoom.items[i]):
-                    response = currentRoom.itemDescriptions[i]
-                    break
-        # verb is take
-        # stuff gets taken, so this works
-        elif (verb == "take"):
-            response = "What am I even supposed to pick up?"
-            for grabbable in currentRoom.grabbables:
-                if (noun == grabbable):
-                    inventory.append(grabbable)
-                    currentRoom.delGrabbable(grabbable)
-                    response = "{} is now in your inventory.".format(grabbable)
-                    if (currentRoom == r1):
-                        currentRoom.delItem("table", "It appears to be made of mahogany. A brass key lays on it, close to the left edge as though tossed there carelessly.")
-                        currentRoom.addItem("table", "Nothing lays upon the mahogany surface.")
-                    if (currentRoom == r3):
-                        # readable added when book is grabbed. It can now be read anywhere, but not without getting the journal to begin with - Santiago
-                        # modifies appearance of the desk and fireplace - Santiago
-                        currentRoom.delItem("desk", "A faded red journal rests upon the mahogany surface.")
-                        currentRoom.addItem("desk", "The desk is bare.")
-                        r2.delItem("fireplace", "It's a stone fireplace, with nothing but ashes in it. There is currently no fire lit.")
-                        r2.addItem("fireplace", "It's still a stone fireplace, but where there were only ashes, there is now a roaring fire.")
-                    if (currentRoom == r4):
-                        # modifies appearance of the bookshelves. An event has been triggered! - Santiago
-                        r3.delItem("bookshelves", "One shelf has its books organized by series. Another shelf is filled with knick-knacks. The others are empty.")
-                        r3.addItem("bookshelves", "One shelf has its books organized by series. Another shelf is filled with knick-knacks. However, one of the empty shelves now has a laptop on it.")
-                        r4.delItem("brew_rig", "You have no idea how to brew anything, but now you know whose house you've broken into. A 6-pack of some experimental batch is resting beside it. This is what you came for.")
-                        r4.addItem("brew_rig", "You still don't know how to brew beer, but you've already taken the fruits of its labors.")
-                        response = "You hear a thud from the west of you, followed by footsteps. Finally, you hear another door slam shut. Somebody else is here as well. You wonder if they moved anything around."
-                    break
+                    Game.currentRoom =\
+                        Game.currentRoom.exits[noun]
+                    # response of success
+                    response = "You have entered another room."
+            # verb is: look
+            elif (verb == "look"):
+                # set default response
+                response = "There's nothing like that here."
+                # check for valid items
+                if (noun in Game.currentRoom.items):
+                    # if one found, set response to item's description
+                    response = Game.currentRoom.items[noun]
+            # verb is: take
+            elif (verb == "take"):
+                # default response
+                response = "What am I even supposed to pick up?"
+                # check for valid grabbales in the current room
+                for grabbable in Game.currentRoom.grabbables:
+                    if (noun == grabbable):
+                        # add to player's inventory
+                        Game.inventory.append(grabbable)
+                        # remove grabbable from the room
+                        Game.currentRoom.delGrabbable(grabbable)
+                        # set succesful response
+                        response = "{} is now in your inventory.".format(grabbable)
+                        break
+        # display response to right of GUI
+        # display room's image on the left
+        # clear player's input
+        self.setStatus(response)
+        self.setRoomImage()
+        Game.player_input.delete(0, END)
+###########################################################################################
+# the default size of the GUI is 800x600
+WIDTH = 800
+HEIGHT = 600
 
-    print "\n{}".format(response)
+# create the window
+window = Tk()
+window.title("Room Adventure")
 
-    # this street has really dangerous litter
+# create the GUI as a Tkinter canvas inside the window
+g = Game(window)
+# play the game
+g.play()
+
+# wait for the window to close
+window.mainloop()
+##########################################################################################
+# go!
+# this street has really dangerous litter
             
         
 
