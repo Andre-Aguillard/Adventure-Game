@@ -123,66 +123,66 @@ class Game(Frame):
         # calls constructor in superclass
         Frame.__init__(self, parent)
         
-def createRooms():
-    # r1-r4 are the four rooms in the alleged mansion
-    # I may add more rooms as time goes on
-    # currentRoom is the room we're currently in. It can be any of the four
-    # this needs to be global since it's changed in the main part of the program
-    global currentRoom
+    def createRooms():
+        # r1-r4 are the four rooms in the alleged mansion
+        # I may add more rooms as time goes on
+        # currentRoom is the room we're currently in. It can be any of the four
+        # this needs to be global since it's changed in the main part of the program
+        global currentRoom
 
-    r1 = Room("Room 1")
-    r2 = Room("Room 2")
-    r3 = Room("Room 3")
-    r4 = Room("Room 4")
+        r1 = Room("Room 1")
+        r2 = Room("Room 2")
+        r3 = Room("Room 3")
+        r4 = Room("Room 4")
 
 
-    # adds exits to room 1
-    r1.addExit("east", r2) # to the east of room 1 is room 2
-    r1.addExit("south", r3)
-    r1.addExit("west", None) # this is the window that you broke to get in. -Santiago
-    # add grabbables
-    r1.addGrabbable("key")
-    # edit so that when key is taken, another message for the table pops up.
-    # add items
-    r1.addItem("window", "The window is shattered, and there are shards of glass on the floor. This is how you got into the house.")
-    r1.addItem("chair", "It's a chair. It's timeworn and ripped on one side, but looks comfy nonetheless.")
-    r1.addItem("table", "It appears to be made of mahogany. A brass key lays on it, close to the left edge as though tossed there carelessly.")
-    
-    #add exits to room 2
-    r2.addExit("west", r1)
-    r2.addExit("south", r4)
-    # add kickable
-    r2.addItem("rug", "It looks like one of those Persian rugs your grandmother has. One of the edges has rolled up. You think you see something underneath.")
-    # there will be a trapdoor under the rug. Add input so that rug can be removed
-    r2.addItem("fireplace", "It's a stone fireplace, with nothing but ashes in it. There is currently no fire lit.")
+        # adds exits to room 1
+        r1.addExit("east", r2) # to the east of room 1 is room 2
+        r1.addExit("south", r3)
+        r1.addExit("west", None) # this is the window that you broke to get in. -Santiago
+        # add grabbables
+        r1.addGrabbable("key")
+        # edit so that when key is taken, another message for the table pops up.
+        # add items
+        r1.addItem("window", "The window is shattered, and there are shards of glass on the floor. This is how you got into the house.")
+        r1.addItem("chair", "It's a chair. It's timeworn and ripped on one side, but looks comfy nonetheless.")
+        r1.addItem("table", "It appears to be made of mahogany. A brass key lays on it, close to the left edge as though tossed there carelessly.")
 
-    #add exit to room 3
-    r3.addExit("north", r1)
-    r3.addExit("east", r4)
-    # add grabbables
-    r3.addGrabbable("journal")
-    r3.addGrabbable("flashlight")
-    # add items
-    r3.addItem("bookshelves", "One shelf has its books organized by series. Another shelf is filled with knick-knacks. The others are empty.")
-    # may add knick-knacks to be picked up
-    r3.addItem("statue", "You're unsure whether it's supposed to be a Greek bust, or if something knocked its head off.")
-    r3.addItem("desk", "A faded red journal rests upon the mahogany surface.") # there should be a read option, so that you can gaze upon cryptic recipes for beer.
-    # took readable and moved it down, so that you can't read the journal before picking it up - Santiago
-    
-    # adds exits to room 4
-    r4.addExit("north", r2)
-    r4.addExit("west", r3)
-    r4.addExit("south", None) # that exit may be your doom
-    r4.addExit("up", r8)
-    # add grabbables
-    r4.addGrabbable("6-pack")
-    # add items
-    r4.addItem("brew_rig", "You have no idea how to brew anything, but now you know whose house you've broken into. A 6-pack of some experimental batch is resting beside it. This is what you came for.")
-    r4.addItem("painting", "The painting is of a gray-haired fellow, his head surrounded by a golden halo. The background is of a cloudy sky. You know very well that this is a depiction of Our Gourd and Savior.")
-    r4.addItem("ladder", "It's a metal ladder, bolted to the left wall.")
-    r4.addItem("window", "It's an open window on the far side of the room. You should really watch your step.")
-    
-    currentRoom = r1
+        #add exits to room 2
+        r2.addExit("west", r1)
+        r2.addExit("south", r4)
+        # add kickable
+        r2.addItem("rug", "It looks like one of those Persian rugs your grandmother has. One of the edges has rolled up. You think you see something underneath.")
+        # there will be a trapdoor under the rug. Add input so that rug can be removed
+        r2.addItem("fireplace", "It's a stone fireplace, with nothing but ashes in it. There is currently no fire lit.")
+
+        #add exit to room 3
+        r3.addExit("north", r1)
+        r3.addExit("east", r4)
+        # add grabbables
+        r3.addGrabbable("journal")
+        r3.addGrabbable("flashlight")
+        # add items
+        r3.addItem("bookshelves", "One shelf has its books organized by series. Another shelf is filled with knick-knacks. The others are empty.")
+        # may add knick-knacks to be picked up
+        r3.addItem("statue", "You're unsure whether it's supposed to be a Greek bust, or if something knocked its head off.")
+        r3.addItem("desk", "A faded red journal rests upon the mahogany surface.") # there should be a read option, so that you can gaze upon cryptic recipes for beer.
+        # took readable and moved it down, so that you can't read the journal before picking it up - Santiago
+
+        # adds exits to room 4
+        r4.addExit("north", r2)
+        r4.addExit("west", r3)
+        r4.addExit("south", None) # that exit may be your doom
+        r4.addExit("up", r8)
+        # add grabbables
+        r4.addGrabbable("6-pack")
+        # add items
+        r4.addItem("brew_rig", "You have no idea how to brew anything, but now you know whose house you've broken into. A 6-pack of some experimental batch is resting beside it. This is what you came for.")
+        r4.addItem("painting", "The painting is of a gray-haired fellow, his head surrounded by a golden halo. The background is of a cloudy sky. You know very well that this is a depiction of Our Gourd and Savior.")
+        r4.addItem("ladder", "It's a metal ladder, bolted to the left wall.")
+        r4.addItem("window", "It's an open window on the far side of the room. You should really watch your step.")
+
+        currentRoom = r1
  
 # displays an appropriate "message" when the player dies
 # yes, this is intentionally obfuscated!
