@@ -37,7 +37,7 @@ class Room(object):
     # image getter   
     @property
     def image(self):
-        returnself._image
+        return self._image
         
     # image getter
     @image.setter
@@ -81,13 +81,13 @@ class Room(object):
     # the room is an instance of the room
     def addExit(self, exit, room):
         # appends the exit and room to the appropriate dictionary - Santiago
-        self._exits[exits] = room
+        self._exits[exit] = room
         
     # adds an item to the room; item is a string
     # description is a string to describe the item
     def addItem(self, item, desc):
         # append the item and description to the appropriate lists
-        self._items.[item] = desc
+        self._items[item] = desc
 
     # adds a grabbable item from the room
     # this is also a string
@@ -110,7 +110,7 @@ class Room(object):
 
         # exits from the room
         s += "Exits: "
-        for exit in self.exits.keys(): # midofied for dictionary
+        for exit in self.exits.keys(): # modified for dictionary
             s += exit + "... "
 
         return s
@@ -132,10 +132,11 @@ class Game(Frame):
         # this needs to be global since it's changed in the main part of the program
         global currentRoom
         # add gifs later - Santiago
-        r1 = Room("Room 1")
-        r2 = Room("Room 2")
-        r3 = Room("Room 3")
-        r4 = Room("Room 4")
+        r1 = Room("Room 1", "room1.gif")
+        r2 = Room("Room 2", "room2.gif")
+        r3 = Room("Room 3", "room3.gif")
+        r4 = Room("Room 4", "room4.gif")
+        r8 = Room("Attic 1","attic1.gif") ### This room needs to be more defined, I just added it to fix somethign below - Aguillard
         # adds exits to room 1
         r1.addExit("east", r2) # to the east of room 1 is room 2
         r1.addExit("south", r3)
@@ -154,7 +155,7 @@ class Game(Frame):
         r2.addItem("rug", "It looks like one of those Persian rugs your grandmother has. One of the edges has rolled up. You think you see something underneath.")
         # there will be a trapdoor under the rug. Add input so that rug can be removed
         r2.addItem("fireplace", "It's a stone fireplace, with nothing but ashes in it. There is currently no fire lit.")
-        #add exit to room 3
+        #add exits to room 3
         r3.addExit("north", r1)
         r3.addExit("east", r4)
         # add grabbables
@@ -170,7 +171,7 @@ class Game(Frame):
         r4.addExit("north", r2)
         r4.addExit("west", r3)
         r4.addExit("south", None) # that exit may be your doom
-        r4.addExit("up", r8)
+        r4.addExit("up", r8)    ### I added a room 8 above but there's nothing to it yet. -Aguillard
         # add grabbables
         r4.addGrabbable("6-pack")
         # add items
