@@ -125,7 +125,7 @@ class Game(Frame):
         # calls constructor in superclass
         Frame.__init__(self, parent)
         
-    def createRooms():
+    def createRooms(self):
         # r1-r4 are the four rooms in the alleged mansion
         # I may add more rooms as time goes on
         # currentRoom is the room we're currently in. It can be any of the four
