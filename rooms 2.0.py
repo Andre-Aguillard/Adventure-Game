@@ -21,14 +21,11 @@ class Room(object):
         self.image = image # added images - Santiago
         self.exits = {} # dictionary for exits
         self.items = {} # dictionary for items
-        self.usables = {} # dictionary for usables, since they are exclusive to particular rooms
+        #self.usables = {} # dictionary for usables, since they are exclusive to particular rooms - Santiago
+        self.kickables = [] # definitely a list here - Santiago
+        #self.openable = {} # again, only for the box down that hallway - Santiago
         self.grabbables = [] # list for grabbables
         # not sure if these would still be lists or if they could be dictionaries...
-        #self.kickables
-        #self.openables
-        #self.readables
-        #lead, programming, GPIO, circuits, comm
-        # these are all lists
 
     # getters and setters for the instance variables
     # these stay the same
@@ -77,6 +74,16 @@ class Room(object):
     @grabbables.setter
     def grabbables(self, value):
         self._grabbables = value
+    
+    # kickables! - Santiago
+    @property
+    def kickables(self):
+        return self._kickables
+    
+    @kickables.setter
+    def kickables(self, value):
+        self._kickables = value
+        
 
     # add stuff as this proves to work - Santiago
 
@@ -92,7 +99,7 @@ class Room(object):
     # adds an item to the room; item is a string
     # description is a string to describe the item
     def addItem(self, item, desc):
-        # append the item and description to the appropriate lists
+        # append the item and description to the appropriate dictionary
         self._items[item] = desc
 
     # adds a grabbable item from the room
@@ -104,6 +111,14 @@ class Room(object):
     def delGrabbable(self, item):
         # delete from the list
         self._grabbables.remove(item)
+    # adds usable once certain items are picked up or certain rooms are entered
+    
+    # kickables! - Santiago
+    def addKickable(self, item):
+        self._kickables.append(item)
+    def delKickable(self, item):
+        self._kickables.remove(item)
+
     def __str__(self):
         # room name
         s = "You are in {}.\n".format(self.name)
@@ -157,7 +172,7 @@ class Game(Frame):
         #add exits to room 2    ###I'm gonna format the lines like the ones above^^^ so they don't cut words in half in the window - Aguillard
         r2.addExit("west", r1)
         r2.addExit("south", r4)
-        # add kickable
+        r2.addKickable("rug") #added the kickable - Santiago
         r2.addItem("rug", "It looks like one of those Persian rugs your \n grandmother has. One of the edges has rolled up.\n You think you see something underneath.")
         # there will be a trapdoor under the rug. Add input so that rug can be removed
         r2.addItem("fireplace", "It's a stone fireplace, with nothing but ashes in it. There is currently no fire lit.")
@@ -214,7 +229,7 @@ class Game(Frame):
         text_frame = Frame(self, width=WIDTH / 2)
         # widget - same deal as above
         # disable by default
-        # don't let it control frame's size
+        # don't let it control frame's size # is there any way to put the text in the middle? Having it to the left
         Game.text = Text(text_frame, bg="lightgrey", state=DISABLED)
         Game.text.pack(fill=Y, expand=1)
         text_frame.pack(side=RIGHT, fill=Y)
@@ -238,6 +253,7 @@ class Game(Frame):
         if (Game.currentRoom == None):
             # if dead, let player know
             Game.text.insert(END, "You've met with a terrible fate, haven't you? \n")
+            # i'd love to add the try again function back in - Santiago      
         else:
             # display appropriate status
             Game.text.insert(END, str(Game.currentRoom) +\
@@ -263,7 +279,7 @@ class Game(Frame):
         # to compare verb and noun to known values
         action = action.lower()
         # default response
-        response = "I don't understand. Try the format <verb> <noun>. Valid verbs are go, look, and take. \
+        response = "I don't understand. Try the format <verb> <noun>. Valid verbs are go, look, take, and kick.\n
             Type help me for more assistance." ### I added a help response -Aguillard
                       
         # exit the game if player wants to leave
@@ -321,6 +337,15 @@ class Game(Frame):
                         # once the item is taken
                         # also, code to add to other lists and stuff - Santiago
                         break
+            elif (verb == "kick"): # added kicking back! - Santiago
+                # default response
+                response = "Violence isn't always the answer, so quit trying to kick everything."
+                # check for valid kickables
+                for kickable in Game.currentRoom.kickables:
+                    if (noun == kickable):
+                        # response here
+                        response = "You've kicked the rug away, or rather, \nyou've shuffled it out of the way.\nYou've discovered a trapdoor!"
+                        Game.currentRoom.addItem("trapdoor", "It is a wooden door with a circular handle.\nThe handle folds into the floor.")
             #### Help me function provides more assitance to the user -Aguillard
             ### Also \n formats the text in tkinter to a new line, I went through and made sure the text all fit 
                 ### within the lines of the window.
