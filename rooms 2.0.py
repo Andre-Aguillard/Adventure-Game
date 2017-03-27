@@ -147,12 +147,12 @@ class Game(Frame):
         # add items
         r1.addItem("window", "The window is shattered, and there are shards of glass on the floor. This is how you got into the house.")
         r1.addItem("chair", "It's a chair. It's timeworn and ripped on one side, but looks comfy nonetheless.")
-        r1.addItem("table", "It appears to be made of mahogany. A brass key lays on it, close to the left edge as though tossed there carelessly.")
-        #add exits to room 2
+        r1.addItem("table", "It appears to be made of mahogany. A brass key \nlays on it, close to the left edge as though \ntossed there carelessly.") 
+        #add exits to room 2    ###I'm gonna format the lines like the ones above^^^ so they don't cut words in half in the window - Aguillard
         r2.addExit("west", r1)
         r2.addExit("south", r4)
         # add kickable
-        r2.addItem("rug", "It looks like one of those Persian rugs your grandmother has. One of the edges has rolled up. You think you see something underneath.")
+        r2.addItem("rug", "It looks like one of those Persian rugs your \n grandmother has. One of the edges has rolled up.\n You think you see something underneath.")
         # there will be a trapdoor under the rug. Add input so that rug can be removed
         r2.addItem("fireplace", "It's a stone fireplace, with nothing but ashes in it. There is currently no fire lit.")
         #add exits to room 3
@@ -175,8 +175,8 @@ class Game(Frame):
         # add grabbables
         r4.addGrabbable("6-pack")
         # add items
-        r4.addItem("brew_rig", "You have no idea how to brew anything, but now you know whose house you've broken into. A 6-pack of some experimental batch is resting beside it. This is what you came for.")
-        r4.addItem("painting", "The painting is of a gray-haired fellow, his head surrounded by a golden halo. The background is of a cloudy sky. You know very well that this is a depiction of Our Gourd and Savior.")
+        r4.addItem("brew_rig", "You have no idea how to brew anything, but now \nyou know whose house you've broken into. A 6-pack of some experimental batch is resting beside it. This is what you came for.")
+        r4.addItem("painting", "The painting is of a gray-haired fellow, his head surrounded by a golden halo. The background is of a cloudy sky. You know very well that this is a \ndepiction of Our Gourd and Savior.")
         r4.addItem("ladder", "It's a metal ladder, bolted to the left wall.")
         r4.addItem("window", "It's an open window on the far side of the room. You should really watch your step.")
 
@@ -257,8 +257,9 @@ class Game(Frame):
         # to compare verb and noun to known values
         action = action.lower()
         # default response
-        response = "I don't understand. Try the format <verb> <noun>. Valid verbs are go, look, and take."
-        
+        response = "I don't understand. Try the format <verb> <noun>. Valid verbs are go, look, and take. \
+            Type help me for more assistance." ### I added a help response -Aguillard
+                      
         # exit the game if player wants to leave
         # supports quit, exit, and bye, felicia
         if (action == "quit" or action == "exit" or action == "bye"):
@@ -310,6 +311,27 @@ class Game(Frame):
                         # set succesful response
                         response = "{} is now in your inventory.".format(grabbable)
                         break
+            #### Help me function provides more assitance to the user -Aguillard
+            ### Also \n formats the text in tkinter to a new line, I went through and made sure the text all fit 
+                ### within the lines of the window.
+            elif (verb == "help"):
+                if (noun == "me"):
+                    response = "The object of the game is to fulfill an \n" \
+                                "unconventional beer run--rather than go to \n" \
+                                "Walgreen's, you've instead gained access to one \n" \
+                                "of your professor's houses to get an excellent \n" \
+                                "small-batch brew. \n" \
+                                "Type <verb><noun> to do things. \n" \
+                                "Correct spelling is a must. \n" \
+                                "Valid verbs include: look, go, and take. \n"\
+                                "Valid nouns include things such as directions, \n" \
+                                "objects in the room, and even certain \n" \
+                                "items within descriptions. \n" \
+                                "If one action doesn't work on something, \ntry a different one. \n" \
+                                "Some things/actions are limited to certain rooms. Keep that in mind. \n" \
+                                "Remember to revisit places you've been. An action you've performed in one" \
+                                "room can cause changes in others. \n" \
+                                "Good luck and have fun!"
         # display response to right of GUI
         # display room's image on the left
         # clear player's input
