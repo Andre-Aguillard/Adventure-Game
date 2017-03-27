@@ -19,9 +19,15 @@ class Room(object):
         # KEEP THE ADDITIONAL THINGIES
         self.name = name
         self.image = image # added images - Santiago
-        self.exits = {}
-        self.items = {}
-        self.grabbables = []
+        self.exits = {} # dictionary for exits
+        self.items = {} # dictionary for items
+        self.usables = {} # dictionary for usables, since they are exclusive to particular rooms
+        self.grabbables = [] # list for grabbables
+        # not sure if these would still be lists or if they could be dictionaries...
+        #self.kickables
+        #self.openables
+        #self.readables
+        #lead, programming, GPIO, circuits, comm
         # these are all lists
 
     # getters and setters for the instance variables
@@ -289,6 +295,7 @@ class Game(Frame):
                         Game.currentRoom.exits[noun]
                     # response of success
                     response = "You have entered another room."
+            # note to self - add more verb. - Santiago
             # verb is: look
             elif (verb == "look"):
                 # set default response
@@ -310,6 +317,9 @@ class Game(Frame):
                         Game.currentRoom.delGrabbable(grabbable)
                         # set succesful response
                         response = "{} is now in your inventory.".format(grabbable)
+                        # put code here to delete item descriptions in room and replace them
+                        # once the item is taken
+                        # also, code to add to other lists and stuff - Santiago
                         break
             #### Help me function provides more assitance to the user -Aguillard
             ### Also \n formats the text in tkinter to a new line, I went through and made sure the text all fit 
