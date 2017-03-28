@@ -440,10 +440,10 @@ class Game(Frame):
                             r2.addItem("fireplace", "It's still a stone fireplace, but where there\nwere only ashes, there is now a roaring fire.")
                         if (Game.currentRoom == r4):
                             r3.delItem("bookshelves", "One shelf has its books organized by series. Another shelf is filled with knick-knacks. The others are empty.")
-                            r3.addItem("bookshelves", "One shelf has its books organized by series. Another shelf is filled with knick-knacks. However, one of the empty shelves now has a laptop on it.")
+                            r3.addItem("bookshelves", "One shelf has its books organized by series. Another shelf is filled with knick-knacks. However,\none of the empty shelves now has a laptop on it.")
                             r4.delItem("brew_rig", "You have no idea how to brew anything, but now you know whose house you've broken into. A 6-pack of some experimental batch is resting beside it. This is what you came for.")
                             r4.addItem("brew_rig", "You still don't know how to brew beer, but you've already taken the fruits of its labors.")
-                            response = "You hear a thud from the west of you, followed by footsteps. Finally, you hear another door slam shut. Somebody else is here as well. You wonder if they moved anything around."
+                            # "You hear a thud from the west of you, followed by footsteps. Finally, you hear another door slam shut. Somebody else is here as well. You wonder if they moved anything around."
                         # set succesful response
                         response = "{} is now in your inventory.".format(grabbable)
                         # put code here to delete item descriptions in room and replace them
