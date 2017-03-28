@@ -1,13 +1,14 @@
 ###########################################################################################
 # Names: Andre Aguillard, Samantha Santiago
 # Date: 3/24/2017
-# Description: Rooms 2.0, now with pictures!
+# Description: Adventure is out there!
 ###########################################################################################
 from Tkinter import *
 
 # the blueprint for a room
 # room class
 # NEED TO EDIT TO FULLY IMPLEMENT DICTIONARIES - SANTIAGO
+# be sure to correct spacing issues - Santiago
 class Room(object):
     # constructor
     def __init__(self, name, image):
@@ -121,6 +122,7 @@ class Room(object):
     def delGrabbable(self, item):
         # delete from the list
         self._grabbables.remove(item)
+        
     # adds usable once certain items are picked up or certain rooms are entered
     
     # kickables! - Santiago
@@ -200,6 +202,7 @@ class Game(Frame):
         r13 = Room("a tunnel", "tunnel.gif")
         r14 = Room("a tunnel", "tunnel.gif")
         r15 = Room(" ", "goodend.gif")
+        
         # adds exits to room 1
         r1.addExit("east", r2) # to the east of room 1 is room 2
         r1.addExit("south", r3)
@@ -209,15 +212,18 @@ class Game(Frame):
         # edit so that when key is taken, another message for the table pops up.
         # add items
         r1.addItem("window", "The window is shattered, and there are shards of glass on the floor. This is how you got into the house.")
-        r1.addItem("chair", "It's a chair. It's timeworn and ripped on one side, but looks comfy nonetheless.")
+        r1.addItem("chair", "It's a chair. It's timeworn and ripped on one\nside, but looks comfy nonetheless.")
         r1.addItem("table", "It appears to be made of mahogany. A brass key\nlays on it, close to the left edge as though\ntossed there carelessly.") 
+        
         #add exits to room 2    ###I'm gonna format the lines like the ones above^^^ so they don't cut words in half in the window - Aguillard
         r2.addExit("west", r1)
         r2.addExit("south", r4)
+        #added kickable - Santiago
         r2.addKickable("rug") #added the kickable - Santiago
         r2.addItem("rug", "It looks like one of those Persian rugs your\ngrandmother has. One of the edges has rolled up.\nYou think you see something underneath.")
         # there will be a trapdoor under the rug. Add input so that rug can be removed
         r2.addItem("fireplace", "It's a stone fireplace, with nothing but ashes in it. There is currently no fire lit.")
+        
         #add exits to room 3
         r3.addExit("north", r1)
         r3.addExit("east", r4)
@@ -225,11 +231,11 @@ class Game(Frame):
         r3.addGrabbable("journal")
         r3.addGrabbable("flashlight")
         # add items
-        r3.addItem("bookshelves", "One shelf has its books organized by series. Another shelf is filled\nwith knick-knacks. The others are empty.")
+        r3.addItem("bookshelves", "One shelf has its books organized by series.\nAnother shelf is filled with knick-knacks. The others are empty.")
         # may add knick-knacks to be picked up
         r3.addItem("statue", "You're unsure whether it's supposed to be a Greek bust, or if something knocked its head off.")
-        r3.addItem("desk", "A faded red journal rests upon the mahogany surface.") # there should be a read option, so that you can gaze upon cryptic recipes for beer.
-        # took readable and moved it down, so that you can't read the journal before picking it up - Santiago
+        r3.addItem("desk", "A faded red journal rests upon the mahogany\nsurface.") # there should be a read option, so that you can gaze upon cryptic recipes for beer.
+                
         # adds exits to room 4
         r4.addExit("north", r2)
         r4.addExit("west", r3)
@@ -238,39 +244,57 @@ class Game(Frame):
         # add grabbables
         r4.addGrabbable("6-pack")
         # add items
-        r4.addItem("brew_rig", "You have no idea how to brew anything, but now\nyou know whose house you've broken into. A 6-pack of some\nexperimental batch is resting beside it. This is what you came for.")
-        r4.addItem("painting", "The painting is of a gray-haired fellow, his head surrounded\nby a golden halo. The background is of a cloudy sky. You know very wellthat this is a\ndepiction of Our Gourd and Savior.")
+        r4.addItem("brew_rig", "You have no idea how to brew anything, but now\nyou know whose house you've broken into. A 6-pack of some experimental batch is resting beside it. This is what you came for.")
+        r4.addItem("painting", "The painting is of a gray-haired fellow, his head surrounded by a golden halo. The background is of a cloudy\nsky. You know very well that this is a depiction of Our Gourd and Savior.")
         r4.addItem("ladder", "It's a metal ladder, bolted to the left wall.")
         r4.addItem("window", "It's an open window on the far side of the room. You should really watch your step.")
+        
         # now adding the other rooms - Santiago
         r5.addExit("up", r2)
         r5.addExit("east", r6)
+        # added items - Santiago
         r5.addItem("light", "It's a bare bulb on a string.\nIt doesn't provide a lot to see by.")
         r5.addItem("cobweb", "It's a dusty web.\nYou're hoping that there isn't a massive spider in it.")\
         
+        # adding exits to r6 - Santiago
         r6.addExit("west", r5)
         r6.addExit("east", r7)
+        # added item - Santiago
         r6.addItem("old_poster", "It's a faded poster of a beautiful woman;\nit seems familiar for some reason.\nIt's stuck to the wall with glue. You think you can hear the wind\nblowing behind it. You could use something to tear it.")
         
+        # adding to r7 - Santiago
         r7.addExit("west", r6)
+        # items to r7 - Santiago
         r7.addItem("box", "It's a small, wooden box atop a pedestal.\nYou're pretty sure it used to hold cigars.\nIt is locked.")
         r7.addItem("overhead_lamp", "A large lamp hangs over the pedestal.")
+        # adding an openable - Santiago
+        r7.addOpenable("box")
         
+        # r8 now - Santiago
         r8.addExit("down", r4)
         r8.addExit("west", r9)
         r8.addExit("south", r10)
+        # item
+        r8.addItem("flag", "It's a flag with a maple leaf. You wonder where the hockey sticks and poutine are at.")
         
+        # to r9 - Santiago
         r9.addExit("east", r8)
-        r9.addItem("rock", "It's a small, round stone laying on the wooden floor. If you flip it over,\nyou can see that someone painted a face on it. Either way, it's excellent for throwing\nat things, especially things that tear.")
+        #item
+        r9.addItem("rock", "It's a small, round stone laying on the wooden\nfloor. If you flip it over, you can see that someone\npainted a face on it. Either way, it's excellent for throwing at things, especially things that tear.")
+        # grabbable
+        r9.addGrabbable("rock")
         
+        # last part of the attic - Santiago
         r10.addExit("north", r8)
         r10.addExit("south", None)
-        r10.addItem("window", "It is an open window. If you go up to it and look down, you can see\n a ladder leaning up against the side of the house. It's a way out!")
-        r10.addItem("hockey_stick", "It's a hockey stick, long and curved at the end. Considering you're\nin the South, and it's about 80 degrees Fahrenheit outside,\nyou wonder why this is even here.")
+        # items
+        r10.addItem("window", "It is an open window. If you go up to it and look down, you can see a ladder leaning up against the side of the house. It's a way out!")
+        r10.addItem("hockey_stick", "It's a hockey stick, long and curved at the end. Considering you're in the South, and it's about\n80 degrees Fahrenheit outside, you wonder why this is even here.")
         
+        #tunnel - Santiago
         r12.addExit("south", r6)
         r12.addExit("north", r13)
-    
+        #tunnel
         r13.addExit("south", r12)
         r13.addExit("north", r14)
         
@@ -279,6 +303,7 @@ class Game(Frame):
         
     def setupGUI(self): # - Santiago
         #organize the GUI
+        # this function works fine, as long as you have the images as actual GIFs
         self.pack(fill=BOTH, expand=1)
         #setup the player input at the bottom of the GUI
         #widget is a Tkinter Entry
@@ -325,7 +350,7 @@ class Game(Frame):
         Game.text.delete("1.0", END)
         if (Game.currentRoom == None):
             # if dead, let player know
-            Game.text.insert(END, "You've met with a terrible fate, haven't you? \n")
+            Game.text.insert(END, "You've met with a terrible fate, haven't you?\n Try again? (yes or no)")
             # i'd love to add the try again function back in - Santiago      
         else:
             # display appropriate status
@@ -343,7 +368,7 @@ class Game(Frame):
         self.setRoomImage()
         # set the current status
         self.setStatus("")
-           
+       
     # processes the player's input
     def process(self, event): # - Santiago
         # grab player's input from bottom of GUI
@@ -356,15 +381,16 @@ class Game(Frame):
                       
         # exit the game if player wants to leave
         # supports quit, exit, and bye, felicia
-        if (action == "quit" or action == "exit" or action == "bye"):
-            exit(0)
-        
-        # if player is dead if they went south from room 4 or west from room 1
+        # got rid of these. If I can exit with the x button, what's the point? - Santiago
+
+        # if player is dead if they went south from room 4 or west from room 1 # or if they try to go 'weast'
         if (Game.currentRoom == None):
             # clear input
-            Game.player_input.delete(0, END)
-            return
-        
+            Game.player_input.delete(0, END) # I figured out the try again screen! :D
+            if (action == "yes"):
+                self.createRooms()
+            elif (action == "no"):
+                exit(0)               
         # split user input into words and store words in a list
         words = action.split()
         
@@ -422,20 +448,20 @@ class Game(Frame):
                         Game.currentRoom.delItem("rug", "It looks like one of those Persian rugs your grandmother has. One of the edges has rolled up. You think you see something underneath.") # be able to delete the rug from items list
                         Game.currentRoom.addItem("rug", "The ornate rug is in a crumpled heap, off to the side. There's not much to do to it anymore.")
                         Game.currentRoom.addOpenable("trapdoor")
-            elif (verb == "open"):
+            elif (verb == "open"): # this still doesn't work - Santiago
                 response = "There's nothing that can be opened."
                 for openable in Game.currentRoom.openables:
                     if (noun == openable):
-                        if (Game.currentRoom == r2):
-                         # something here to prompt for an answer and respond properly - Santiago
-                            if (action == "yes"):
-                                response = "You have opened the trapdoor."
-                                Game.currentRoom.delItem("trapdoor", "It is a wooden door with a circular handle.\nThe handle folds into the floor.")
-                                Game.currentRoom.addItem("trapdoor", "It is a wooden door with a circular handle.\nThe door has been swung to the side, revealing a dark descent.")
-                                Game.currentRoom.delOpenable("trapdoor")
-                                Game.currentRoom.addExit("down", r5)
-                            elif (action == "no"):
-                                response = "You leave the trapdoor closed."
+                        Game.text.insert(END, "Open the trapdoor? (yes or no)")
+                        # something here to prompt for an answer and respond properly - Santiago
+                        if (action == "yes"):
+                            response = "You have opened the trapdoor."
+                            Game.currentRoom.delItem("trapdoor", "It is a wooden door with a circular handle.\nThe handle folds into the floor.")
+                            Game.currentRoom.addItem("trapdoor", "It is a wooden door with a circular handle.\nThe door has been swung to the side, revealing a dark descent.")
+                            Game.currentRoom.delOpenable("trapdoor")
+                            Game.currentRoom.addExit("down", r5)
+                        elif (action == "no"):
+                            response = "You leave the trapdoor closed."
             #### Help me function provides more assitance to the user -Aguillard
             ### Also \n formats the text in tkinter to a new line, I went through and made sure the text all fit 
                 ### within the lines of the window.
@@ -483,5 +509,3 @@ window.mainloop()
 # go!
 # this street has really dangerous litter
             
-        
-  
