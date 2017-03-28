@@ -23,7 +23,7 @@ class Room(object):
         self.items = {} # dictionary for items
         #self.usables = {} # dictionary for usables, since they are exclusive to particular rooms - Santiago
         self.kickables = [] # definitely a list here - Santiago
-        #self.openable = {} # again, only for the box down that hallway - Santiago
+        self.openables = [] # again, only for the box down that hallway and the trapdoor - Santiago
         self.grabbables = [] # list for grabbables
         # not sure if these would still be lists or if they could be dictionaries...
 
@@ -84,6 +84,14 @@ class Room(object):
     def kickables(self, value):
         self._kickables = value
         
+    # openables - Santiago
+    @property
+    def openables(self):
+        return self._openables
+    
+    @openables.setter
+    def openables(self, value):
+        self._openables = value
 
     # add stuff as this proves to work - Santiago
 
@@ -101,6 +109,8 @@ class Room(object):
     def addItem(self, item, desc):
         # append the item and description to the appropriate dictionary
         self._items[item] = desc
+    def delItem(self, item, desc):
+        del self._items[item] 
 
     # adds a grabbable item from the room
     # this is also a string
@@ -118,6 +128,12 @@ class Room(object):
         self._kickables.append(item)
     def delKickable(self, item):
         self._kickables.remove(item)
+        
+    #openables
+    def addOpenable(self, item):
+        self._openables.append(item)
+    def delOpenable(self, item):
+        self._openables.remove(item)
 
     def __str__(self):
         # room name
@@ -152,6 +168,21 @@ class Game(Frame):
         # currentRoom is the room we're currently in. It can be any of the four
         # this needs to be global since it's changed in the main part of the program
         global currentRoom
+        global r1
+        global r2
+        global r3
+        global r4
+        global r5
+        global r6
+        global r7
+        global r8
+        global r9
+        global r10
+        global r11
+        global r12
+        global r13
+        global r14
+        global r15
         # add gifs later - Santiago
         # adding all the rooms - Santiago
         r1 = Room("Room 1", "room1.gif")
@@ -161,10 +192,10 @@ class Game(Frame):
         r5 = Room("the basement", "basement1.gif")
         r6 = Room("the basement", "poster.gif")
         r7 = Room("the basement", "basement1.gif")
-        r8 = Room("the attic","attic1.gif") ### This room needs to be more defined, I just added it to fix somethign below - Aguillard
-        r9 = Room("the attic", "attic1.gif")
-        r10 = Room("the attic", "attic1.gif")
-        r11 = Room(" ", "badend.gif")
+        r8 = Room("the attic","attic.gif") ### This room needs to be more defined, I just added it to fix somethign below - Aguillard
+        r9 = Room("the attic", "attic.gif")
+        r10 = Room("the attic", "attic.gif")
+        r11 = Room(" ", "skull.gif")
         r12 = Room("a tunnel", "tunnel.gif")
         r13 = Room("a tunnel", "tunnel.gif")
         r14 = Room("a tunnel", "tunnel.gif")
@@ -219,7 +250,7 @@ class Game(Frame):
         
         r6.addExit("west", r5)
         r6.addExit("east", r7)
-        r6.addItem("old_poster", "It's a faded poster of a beautiful woman; it seems familiar for some reason.\nIt's stuck to the wall with glue. You think you can hear the wind\nblowing behind it. You could use something to tear it.")
+        r6.addItem("old_poster", "It's a faded poster of a beautiful woman;\nit seems familiar for some reason.\nIt's stuck to the wall with glue. You think you can hear the wind\nblowing behind it. You could use something to tear it.")
         
         r7.addExit("west", r6)
         r7.addItem("box", "It's a small, wooden box atop a pedestal.\nYou're pretty sure it used to hold cigars.\nIt is locked.")
@@ -242,8 +273,6 @@ class Game(Frame):
     
         r13.addExit("south", r12)
         r13.addExit("north", r14)
-
-        r14.addExit("south", r13)
         
         Game.currentRoom = r1 # changed this and inventory - Santiago
         Game.inventory = [] # inventory is now here - Santiago
@@ -389,6 +418,24 @@ class Game(Frame):
                         # response here
                         response = "You've kicked the rug away, or rather,\nyou've shuffled it out of the way.\nYou've discovered a trapdoor!"
                         Game.currentRoom.addItem("trapdoor", "It is a wooden door with a circular handle.\nThe handle folds into the floor.")
+                        Game.currentRoom.delKickable(kickable)
+                        Game.currentRoom.delItem("rug", "It looks like one of those Persian rugs your grandmother has. One of the edges has rolled up. You think you see something underneath.") # be able to delete the rug from items list
+                        Game.currentRoom.addItem("rug", "The ornate rug is in a crumpled heap, off to the side. There's not much to do to it anymore.")
+                        Game.currentRoom.addOpenable("trapdoor")
+            elif (verb == "open"):
+                response = "There's nothing that can be opened."
+                for openable in Game.currentRoom.openables:
+                    if (noun == openable):
+                        if (Game.currentRoom == r2):
+                            action = raw_input("Would you like to open the trapdoor? (yes or no)")
+                            if (action == "yes"):
+                                response = "You have opened the trapdoor."
+                                Game.currentRoom.delItem("trapdoor", "It is a wooden door with a circular handle.\nThe handle folds into the floor.")
+                                Game.currentRoom.addItem("trapdoor", "It is a wooden door with a circular handle.\nThe door has been swung to the side, revealing a dark descent.")
+                                Game.currentRoom.delOpenable("trapdoor")
+                                Game.currentRoom.addExit("down", r5)
+                            elif (action == "no"):
+                                response = "You leave the trapdoor closed."
             #### Help me function provides more assitance to the user -Aguillard
             ### Also \n formats the text in tkinter to a new line, I went through and made sure the text all fit 
                 ### within the lines of the window.
@@ -437,4 +484,3 @@ window.mainloop()
 # this street has really dangerous litter
             
         
-
