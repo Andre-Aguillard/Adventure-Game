@@ -292,14 +292,14 @@ class Game(Frame):
         # widget is a Tkinter label
         # don't let image control width's size
         img = None
-        Game.image = Label(self, width=WIDTH / 2, image = img)
+        Game.image = Label(self, width=WIDTH / 2, height=HEIGHT, image = img)
         Game.image.image = img
         Game.image.pack(side=LEFT, fill=Y)
         Game.image.pack_propagate(False)
         
         # setup text to right of GUI
         # first, place frame where the text will be displayed
-        text_frame = Frame(self, width=WIDTH / 2)
+        text_frame = Frame(self, width=WIDTH / 2, height=HEIGHT)
         # widget - same deal as above
         # disable by default
         # don't let it control frame's size # is there any way to put the text in the middle? Having it to the left
@@ -427,7 +427,7 @@ class Game(Frame):
                 for openable in Game.currentRoom.openables:
                     if (noun == openable):
                         if (Game.currentRoom == r2):
-                            action = raw_input("Would you like to open the trapdoor? (yes or no)")
+                         # something here to prompt for an answer and respond properly - Santiago
                             if (action == "yes"):
                                 response = "You have opened the trapdoor."
                                 Game.currentRoom.delItem("trapdoor", "It is a wooden door with a circular handle.\nThe handle folds into the floor.")
@@ -484,3 +484,4 @@ window.mainloop()
 # this street has really dangerous litter
             
         
+  
