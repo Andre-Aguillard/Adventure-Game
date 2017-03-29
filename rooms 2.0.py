@@ -260,8 +260,7 @@ class Game(Frame):
         r6.addExit("west", r5)
         r6.addExit("east", r7)
         # added item - Santiago
-        r6.addItem("old_poster", "It's a faded poster of a beautiful woman;\nit seems familiar for some reason.\nIt's stuck to the wall with glue. You think you can hear the wind\nblowing behind it. You could use something to tear it.")
-        
+        r6.addItem("old_poster", "It's an old poster of Dominique Wilkins. It's stuck to the wall with glue. You think you can hear the wind blowing behind it. You could use something to tear it.")      
         # adding to r7 - Santiago
         r7.addExit("west", r6)
         # items to r7 - Santiago
@@ -495,7 +494,7 @@ class Game(Frame):
                             Game.currentRoom.addItem("flash_drive", "The proper name for this object is a USB drive. You can plug it into a computer.")
                             Game.currentRoom.addGrabbable("flash_drive")
                         if (Game.currentRoom == r6):
-                            Game.currentRoom.delItem("old_poster", "It's a faded poster of a beautiful woman;\nit seems familiar for some reason.\nIt's stuck to the wall with glue. You think you can hear the wind\nblowing behind it. You could use something to tear it.")
+                            Game.currentRoom.delItem("old_poster",  "It's an old poster of Dominique Wilkins. It's stuck to the wall with glue. You think you can hear the wind blowing behind it. You could use something to tear it.")
                             Game.currentRoom.addItem("torn_poster", "It's an old poster, torn by the rock you threw. A draft is blowing the tatters. You can see a dark tunnel behind it.")  
                             Game.currentRoom.addExit("north", r12)
                             response = "You threw the rock at the poster. It went through. You hear it land somewhere beyond the poster."
