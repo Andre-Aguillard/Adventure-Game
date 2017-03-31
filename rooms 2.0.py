@@ -1,5 +1,5 @@
 ###########################################################################################
-# Names: Andre Aguillard, Samantha Santiago
+# Names: Samantha Santiago, Andre Aguillard
 # Date: 3/24/2017
 # Description: Adventure is out there!
 ###########################################################################################
@@ -21,7 +21,7 @@ class Room(object):
         self.image = image # added images - Santiago
         self.exits = {} # dictionary for exits
         self.items = {} # dictionary for items
-        self.usables = [] # dictionary for usables, since they are exclusive to particular rooms - Santiago
+        self.usables = [] # list for usables, since they are exclusive to particular rooms - Santiago
         self.kickables = [] # definitely a list here - Santiago
         self.grabbables = [] # list for grabbables
         self.readables = [] # list for the journal - Santiago
