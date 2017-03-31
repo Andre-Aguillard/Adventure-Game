@@ -7,7 +7,6 @@ from Tkinter import *
 
 # the blueprint for a room
 # room class
-# NEED TO EDIT TO FULLY IMPLEMENT DICTIONARIES - SANTIAGO
 # be sure to correct spacing issues - Santiago
 class Room(object):
     # constructor
@@ -22,10 +21,10 @@ class Room(object):
         self.image = image # added images - Santiago
         self.exits = {} # dictionary for exits
         self.items = {} # dictionary for items
-        #self.usables = {} # dictionary for usables, since they are exclusive to particular rooms - Santiago
+        self.usables = [] # dictionary for usables, since they are exclusive to particular rooms - Santiago
         self.kickables = [] # definitely a list here - Santiago
-        self.openables = [] # again, only for the box down that hallway and the trapdoor - Santiago
         self.grabbables = [] # list for grabbables
+        self.readables = [] # list for the journal - Santiago
         # not sure if these would still be lists or if they could be dictionaries...
 
     # getters and setters for the instance variables
@@ -33,70 +32,69 @@ class Room(object):
     @property
     def name(self):
         return self._name
-
     @name.setter
     def name(self, value):
-        self._name = value
-        
+        self._name = value       
     # image getter   
     @property
     def image(self):
-        return self._image
-        
+        return self._image        
     # image getter
     @image.setter
     def image(self, value):
         self._image = value
-
     # salidas
     @property
     def exits(self):
         return self._exits
-    
     # exits
     @exits.setter
     def exits(self, value):
         self._exits = value
-
     # items!
     @property
     def items(self):
         return self._items
-
     @items.setter
     def items(self, value):
         self._items = value
-
     # grab and go products
     @property
     def grabbables(self):
         return self._grabbables
-
     @grabbables.setter
     def grabbables(self, value):
         self._grabbables = value
-    
     # kickables! - Santiago
     @property
     def kickables(self):
-        return self._kickables
-    
+        return self._kickables 
     @kickables.setter
     def kickables(self, value):
-        self._kickables = value
-        
+        self._kickables = value   
     # openables - Santiago
     @property
     def openables(self):
         return self._openables
-    
     @openables.setter
     def openables(self, value):
         self._openables = value
+    # usables
+    @property
+    def usables(self):
+        return self._usables
+    @usables.setter
+    def usables(self, value):
+        self._usables = value
+    # readables - Santiago
+    @property
+    def readables(self):
+        return self._readables
+    @readables.setter
+    def readables(self, value):
+        self._readables = value
 
     # add stuff as this proves to work - Santiago
-
-    # glad that that's over. now to add things to build up the game
     
     # adds an exit to the room
     # this exit is a string
@@ -104,7 +102,8 @@ class Room(object):
     def addExit(self, exit, room):
         # appends the exit and room to the appropriate dictionary - Santiago
         self._exits[exit] = room
-        
+    def delExit(self, exit, room):
+        del self._exits[exit]      
     # adds an item to the room; item is a string
     # description is a string to describe the item
     def addItem(self, item, desc):
@@ -112,7 +111,6 @@ class Room(object):
         self._items[item] = desc
     def delItem(self, item, desc):
         del self._items[item] 
-
     # adds a grabbable item from the room
     # this is also a string
     def addGrabbable(self, item):
@@ -121,21 +119,23 @@ class Room(object):
     # removes grabbable from the room
     def delGrabbable(self, item):
         # delete from the list
-        self._grabbables.remove(item)
-        
-    # adds usable once certain items are picked up or certain rooms are entered
-    
+        self._grabbables.remove(item)   
     # kickables! - Santiago
     def addKickable(self, item):
         self._kickables.append(item)
     def delKickable(self, item):
         self._kickables.remove(item)
+    # usables - Santiago
+    def addUsable(self):
+        self._usables.append(item)
+    def delUsable(self, value):
+        self._usables.remove(item)
+    # readables - Santiago
+    def addReadable(self):
+        self._readables.append(item)
         
-    #openables
-    def addOpenable(self, item):
-        self._openables.append(item)
-    def delOpenable(self, item):
-        self._openables.remove(item)
+    # forget the openables, dude. Better to keep this to just the usables -  the key, the usb, and the drive. You use them, it's one and done.
+    # I don't feel like opening additional dialogues - Santiago
 
     def __str__(self):
         # room name
@@ -260,15 +260,13 @@ class Game(Frame):
         r6.addExit("west", r5)
         r6.addExit("east", r7)
         # added item - Santiago
-        r6.addItem("old_poster", "It's a faded poster of a beautiful woman;\nit seems familiar for some reason.\nIt's stuck to the wall with glue. You think you can hear the wind\nblowing behind it. You could use something to tear it.")
-        
+        r6.addItem("old_poster", "It's an old poster of Dominique Wilkins. It's stuck to the wall with glue. You think you can hear the wind blowing behind it. You could use something to tear it.")      
         # adding to r7 - Santiago
         r7.addExit("west", r6)
         # items to r7 - Santiago
         r7.addItem("box", "It's a small, wooden box atop a pedestal.\nYou're pretty sure it used to hold cigars.\nIt is locked.")
         r7.addItem("overhead_lamp", "A large lamp hangs over the pedestal.")
-        # adding an openable - Santiago
-        r7.addOpenable("box")
+
         
         # r8 now - Santiago
         r8.addExit("down", r4)
@@ -297,6 +295,8 @@ class Game(Frame):
         #tunnel
         r13.addExit("south", r12)
         r13.addExit("north", r14)
+
+        r14.addExit("south", r13)
         
         Game.currentRoom = r1 # changed this and inventory - Santiago
         Game.inventory = [] # inventory is now here - Santiago
@@ -350,8 +350,12 @@ class Game(Frame):
         Game.text.delete("1.0", END)
         if (Game.currentRoom == None):
             # if dead, let player know
-            Game.text.insert(END, "You've met with a terrible fate, haven't you?\n Try again? (yes or no)")
-            # i'd love to add the try again function back in - Santiago      
+            Game.text.insert(END, "You've met with a terrible fate, haven't you?\n Type yes to try again, or close out of the window to quit.")
+        # bad ending, good ending - Santiago
+        if (Game.currentRoom == r11):
+            Game.text.insert(END, "\n\n\n\n\n\n\n\n\n\n\n\nYou may have the beer, but you didn't think to\nlook down the ladder before descending.\n\nYou're now being driven off in a cop car on a number of charges.\n\nNeedless to say, this sucks.\n\nIt could've gone better, don't you think?\n\n(type yes to start over, or close out the window to quit)")
+        if (Game.currentRoom == r15):
+            Game.text.insert(END, "\n\n\n\n\n\n\n\n\n\n\n\nYou've made it out of Dr. Gourd's house with the 6-pack of the experimental brew.\n\nThe party shall go on.\n\nCongratulations.\n\nHope you didn't miss anything cool on the way out.\n\n(type yes to start over, or close out the window to quit)")
         else:
             # display appropriate status
             Game.text.insert(END, str(Game.currentRoom) +\
@@ -377,20 +381,21 @@ class Game(Frame):
         # to compare verb and noun to known values
         action = action.lower()
         # default response
-        response = "I don't understand. Try the format <verb> <noun>. Valid verbs are go, look, take, and kick.\nType help me for more assistance." ### I added a help response -Aguillard
+        response = "I don't understand. Try the format <verb> <noun>. Valid verbs are go, look, take, and kick.\nType help me for more assistance. To quit, close out of the window." ### I added a help response -Aguillard
                       
         # exit the game if player wants to leave
         # supports quit, exit, and bye, felicia
         # got rid of these. If I can exit with the x button, what's the point? - Santiago
 
         # if player is dead if they went south from room 4 or west from room 1 # or if they try to go 'weast'
-        if (Game.currentRoom == None):
+        if (Game.currentRoom == None or Game.currentRoom == r11 or Game.currentRoom == r15):
             # clear input
             Game.player_input.delete(0, END) # I figured out the try again screen! :D
             if (action == "yes"):
                 self.createRooms()
             elif (action == "no"):
-                exit(0)               
+                exit(0)
+            
         # split user input into words and store words in a list
         words = action.split()
         
@@ -409,6 +414,9 @@ class Game(Frame):
                         Game.currentRoom.exits[noun]
                     # response of success
                     response = "You have entered another room."
+                    if (Game.currentRoom == r11 or Game.currentRoom == r15):
+                        response = "You've made it out of Gourd's house."
+                        print " "
             # note to self - add more verb. - Santiago
             # verb is: look
             elif (verb == "look"):
@@ -431,9 +439,33 @@ class Game(Frame):
                         Game.currentRoom.delGrabbable(grabbable)
                         # set succesful response
                         response = "{} is now in your inventory.".format(grabbable)
-                        # put code here to delete item descriptions in room and replace them
-                        # once the item is taken
-                        # also, code to add to other lists and stuff - Santiago
+                        # code to change stuff, affect status of the room
+                        if (Game.currentRoom == r1):
+                            Game.currentRoom.delItem("table", "It appears to be made of mahogany. A brass key\nlays on it, close to the left edge as though\ntossed there carelessly.")
+                            Game.currentRoom.addItem("table", "Nothing lays upon the mahogany surface.")                         
+                            r7.addUsable("key")
+                        if (Game.currentRoom == r3):
+                            Game.currentRoom.delItem("desk", "A faded red journal rests upon the mahogany surface.")
+                            Game.currentRoom.addItem("desk", "The desk is bare.")
+                            r2.delItem("fireplace", "It's a stone fireplace, with nothing but ashes in it. There is currently no fire lit.")
+                            r2.addItem("fireplace", "It's still a stone fireplace, but where there\nwere only ashes, there is now a roaring fire.")
+                        if (Game.currentRoom == r4):
+                            r3.delItem("bookshelves", "One shelf has its books organized by series.\nAnother shelf is filled with knick-knacks. The others are empty.")
+                            r3.addItem("bookshelves", "One shelf has its books organized by series.\nAnother shelf is filled with knick-knacks. However, one of the empty shelves now has a laptop on it.")
+                            r3.addUsable("laptop")
+                            Game.currentRoom.delItem("brew_rig", "You have no idea how to brew anything, but now\nyou know whose house you've broken into. A 6-pack of some experimental batch is resting beside it. This is what you came for.")
+                            Game.currentRoom.addItem("brew_rig", "You still don't know how to brew beer, but you've already taken the fruits of its labors.")
+                            r10.delExit("south", None)
+                            r10.addExit("south", r11)
+                            r14.addExit("north", r15)
+                            response = "You hear a thud from the west of you, followed by footsteps. Finally, you hear another door slam\nshut. Somebody else is here as well."
+                        if (Game.currentRoom == r7):
+                            Game.currentRoom.delItem("flash_drive", "The proper name for this object is a USB drive. You can plug it into a computer.")
+                            Game.currentRoom.delGrabbable("flash_drive")
+                            r3.addUsable("flash_drive")
+                        if (Game.currentRoom == r9):
+                            Game.currentRoom.delItem("rock", "It's a small, round stone laying on the wooden\nfloor. If you flip it over, you can see that someone\npainted a face on it. Either way, it's excellent for throwing at things, especially things that tear.")
+                            r6.addUsable("rock")
                         break
             elif (verb == "kick"): # added kicking back! - Santiago
                 # default response
@@ -443,25 +475,42 @@ class Game(Frame):
                     if (noun == kickable):
                         # response here
                         response = "You've kicked the rug away, or rather,\nyou've shuffled it out of the way.\nYou've discovered a trapdoor!"
-                        Game.currentRoom.addItem("trapdoor", "It is a wooden door with a circular handle.\nThe handle folds into the floor.")
+                        Game.currentRoom.addItem("trapdoor", "It is a wooden door with a circular handle.\nIt's opened, revealing a way down.")
                         Game.currentRoom.delKickable(kickable)
                         Game.currentRoom.delItem("rug", "It looks like one of those Persian rugs your grandmother has. One of the edges has rolled up. You think you see something underneath.") # be able to delete the rug from items list
                         Game.currentRoom.addItem("rug", "The ornate rug is in a crumpled heap, off to the side. There's not much to do to it anymore.")
-                        Game.currentRoom.addOpenable("trapdoor")
-            elif (verb == "open"): # this still doesn't work - Santiago
-                response = "There's nothing that can be opened."
-                for openable in Game.currentRoom.openables:
-                    if (noun == openable):
-                        Game.text.insert(END, "Open the trapdoor? (yes or no)")
-                        # something here to prompt for an answer and respond properly - Santiago
-                        if (action == "yes"):
-                            response = "You have opened the trapdoor."
-                            Game.currentRoom.delItem("trapdoor", "It is a wooden door with a circular handle.\nThe handle folds into the floor.")
-                            Game.currentRoom.addItem("trapdoor", "It is a wooden door with a circular handle.\nThe door has been swung to the side, revealing a dark descent.")
-                            Game.currentRoom.delOpenable("trapdoor")
-                            Game.currentRoom.addExit("down", r5)
-                        elif (action == "no"):
-                            response = "You leave the trapdoor closed."
+                        Game.currentRoom.addExit("down", r5)
+            elif (verb == "use"):
+                response = "You can't use this here."
+                for usable in Game.currentRoom.usables:
+                    if (noun == usable):
+                        response = "You've used the {}".format(usable)
+                        Game.currentRoom.delUsable(usable)
+                        Game.inventory.remove(usable)
+                        if (Game.currentRoom == r7):
+                            response = "You have unlocked the wooden box. Inside of it is a flash_drive, a tiny picture of Dr. Box, and some of his photography."
+                            Game.currentRoom.delItem("box", "It's a small, wooden box atop a pedestal.\nYou're pretty sure it used to hold cigars.\nIt is locked.")
+                            Game.currentRoom.addItem("box", "It's an unlocked cigar box.")
+                            Game.currentRoom.addItem("flash_drive", "The proper name for this object is a USB drive. You can plug it into a computer.")
+                            Game.currentRoom.addGrabbable("flash_drive")
+                        if (Game.currentRoom == r6):
+                            Game.currentRoom.delItem("old_poster",  "It's an old poster of Dominique Wilkins. It's stuck to the wall with glue. You think you can hear the wind blowing behind it. You could use something to tear it.")
+                            Game.currentRoom.addItem("torn_poster", "It's an old poster, torn by the rock you threw. A draft is blowing the tatters. You can see a dark tunnel behind it.")  
+                            Game.currentRoom.addExit("north", r12)
+                            response = "You threw the rock at the poster. It went through. You hear it land somewhere beyond the poster."
+                        if (Game.currentRoom == r3 and usable == "flash_drive"):
+                            pass
+                        if (Game.currentRoom == r3 and usable == "laptop"):
+                            pass
+                            # I'll add this stuff later - Santiago
+            elif (verb == "read"):
+                response = "There's nothing here to read."
+                for readable in Game.currentRoom.readables:
+                    if (noun == readable):
+                        pass
+                        # I will also add this later.
+                                                    
+
             #### Help me function provides more assitance to the user -Aguillard
             ### Also \n formats the text in tkinter to a new line, I went through and made sure the text all fit 
                 ### within the lines of the window.
