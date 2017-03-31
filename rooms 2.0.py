@@ -350,7 +350,7 @@ class Game(Frame):
         Game.text.delete("1.0", END)
         if (Game.currentRoom == None):
             # if dead, let player know
-            Game.text.insert(END, "You've met with a terrible fate, haven't you?\n Type yes to try again, or close out of the window to quit.")
+            Game.text.insert(END, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nYou've met with a terrible fate, haven't you?\n\nType yes to try again, or close out of the\nwindow to quit.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         # bad ending, good ending - Santiago
         if (Game.currentRoom == r11):
             Game.text.insert(END, "\n\n\n\n\n\n\n\n\n\n\n\nYou may have the beer, but you didn't think to\nlook down the ladder before descending.\n\nYou're now being driven off in a cop car on a number of charges.\n\nNeedless to say, this sucks.\n\nIt could've gone better, don't you think?\n\n(type yes to start over, or close out the window to quit)")
@@ -389,7 +389,6 @@ class Game(Frame):
 
         # if player is dead if they went south from room 4 or west from room 1 # or if they try to go 'weast'
         if (Game.currentRoom == None or Game.currentRoom == r11 or Game.currentRoom == r15):
-            # clear input
             Game.player_input.delete(0, END) # I figured out the try again screen! :D
             if (action == "yes"):
                 self.createRooms()
@@ -414,6 +413,8 @@ class Game(Frame):
                         Game.currentRoom.exits[noun]
                     # response of success
                     response = "You have entered another room."
+                    if (Game.currentRoom == None):
+                        response = " "             
                     if (Game.currentRoom == r11 or Game.currentRoom == r15):
                         response = "You've made it out of Gourd's house."
                         print " "
