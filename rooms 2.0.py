@@ -131,8 +131,10 @@ class Room(object):
     def delUsable(self, value):
         self._usables.remove(item)
     # readables - Santiago
-    def addReadable(self):
+    def addReadable(self, item):
         self._readables.append(item)
+    def delReadable(self, item):
+        self._readables.remove(item)
         
     # forget the openables, dude. Better to keep this to just the usables -  the key, the usb, and the drive. You use them, it's one and done.
     # I don't feel like opening additional dialogues - Santiago
@@ -229,7 +231,6 @@ class Game(Frame):
         r3.addExit("east", r4)
         # add grabbables
         r3.addGrabbable("journal")
-        r3.addGrabbable("flashlight")
         # add items
         r3.addItem("bookshelves", "One shelf has its books organized by series.\nAnother shelf is filled with knick-knacks. The others are empty.")
         # may add knick-knacks to be picked up
@@ -417,7 +418,6 @@ class Game(Frame):
                         response = " "             
                     if (Game.currentRoom == r11 or Game.currentRoom == r15):
                         response = "You've made it out of Gourd's house."
-                        print " "
             # note to self - add more verb. - Santiago
             # verb is: look
             elif (verb == "look"):
@@ -450,10 +450,20 @@ class Game(Frame):
                             Game.currentRoom.addItem("desk", "The desk is bare.")
                             r2.delItem("fireplace", "It's a stone fireplace, with nothing but ashes in it. There is currently no fire lit.")
                             r2.addItem("fireplace", "It's still a stone fireplace, but where there\nwere only ashes, there is now a roaring fire.")
+                            r1.addReadable("journal")
+                            r2.addReadable("journal")
+                            r3.addReadable("journal")
+                            r4.addReadable("journal")
+                            r5.addReadable("journal")
+                            r7.addReadable("journal")
+                            r8.addReadable("journal")
+                            r9.addReadable("journal")
+                            r10.addReadable("journal")
                         if (Game.currentRoom == r4):
                             r3.delItem("bookshelves", "One shelf has its books organized by series.\nAnother shelf is filled with knick-knacks. The others are empty.")
                             r3.addItem("bookshelves", "One shelf has its books organized by series.\nAnother shelf is filled with knick-knacks. However, one of the empty shelves now has a laptop on it.")
-                            r3.addUsable("laptop")
+                            # laptop is gonna be an item now. The USB drive allows it to be used, if only once - Santiago
+                            r3.addItem("laptop", "It's a slick personal computer on the lock screen. You don't know the password, but you could find something to let you in.")
                             Game.currentRoom.delItem("brew_rig", "You have no idea how to brew anything, but now\nyou know whose house you've broken into. A 6-pack of some experimental batch is resting beside it. This is what you came for.")
                             Game.currentRoom.addItem("brew_rig", "You still don't know how to brew beer, but you've already taken the fruits of its labors.")
                             r10.delExit("south", None)
@@ -500,15 +510,17 @@ class Game(Frame):
                             Game.currentRoom.addExit("north", r12)
                             response = "You threw the rock at the poster. It went through. You hear it land somewhere beyond the poster."
                         if (Game.currentRoom == r3 and usable == "flash_drive"):
-                            pass
-                        if (Game.currentRoom == r3 and usable == "laptop"):
-                            pass
+                            pass #will do later
                             # I'll add this stuff later - Santiago
             elif (verb == "read"):
-                response = "There's nothing here to read."
+                pass #eh, I'll do this later - Santiago
+                response = "You can't read anything here."
                 for readable in Game.currentRoom.readables:
                     if (noun == readable):
-                        pass
+                        Game.player_input.delete(0, END)
+                        Game.text.insert(END, "You've opened the journal. Want to read? (yes or no)")
+                        if (action == "yes"):
+                            response = "Entry 1: To whoever is reading this, you owe it to yourself to watch this video: 9 1-13 23-15-18-18-9-5-4 1-2-15-21-20 13-25 7-18-1-4-5.\n{}"
                         # I will also add this later.
                                                     
 
