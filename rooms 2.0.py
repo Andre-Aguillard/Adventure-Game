@@ -126,9 +126,9 @@ class Room(object):
     def delKickable(self, item):
         self._kickables.remove(item)
     # usables - Santiago
-    def addUsable(self):
+    def addUsable(self, item):
         self._usables.append(item)
-    def delUsable(self, value):
+    def delUsable(self, item):
         self._usables.remove(item)
     # readables - Santiago
     def addReadable(self, item):
@@ -180,7 +180,6 @@ class Game(Frame):
         global r6
         global r7
         global r8
-        global r9
         global r10
         global r11
         global r12
@@ -190,20 +189,19 @@ class Game(Frame):
         # add gifs later - Santiago
         # adding all the rooms - Santiago
         r1 = Room("Room 1", "room1.gif")
-        r2 = Room("Room 2", "room2.gif")
-        r3 = Room("Room 3", "room3.gif")
+        r2 = Room("Room 2", "r2OG.gif")
+        r3 = Room("Room 3", "r3OC.gif")
         r4 = Room("Room 4", "room4.gif")
-        r5 = Room("the basement", "basement1.gif")
-        r6 = Room("the basement", "poster.gif")
-        r7 = Room("the basement", "basement1.gif")
+        r5 = Room("the basement", "r5.gif")
+        r6 = Room("the basement", "r6NC.gif")
+        r7 = Room("the basement", "room7NC.gif")
         r8 = Room("the attic","attic.gif") ### This room needs to be more defined, I just added it to fix somethign below - Aguillard
-        r9 = Room("the attic", "attic.gif")
         r10 = Room("the attic", "attic.gif")
         r11 = Room(" ", "skull.gif")
         r12 = Room("a tunnel", "tunnel.gif")
         r13 = Room("a tunnel", "tunnel.gif")
         r14 = Room("a tunnel", "tunnel.gif")
-        r15 = Room(" ", "goodend.gif")
+        r15 = Room(" ", "ge.gif")
         
         # adds exits to room 1
         r1.addExit("east", r2) # to the east of room 1 is room 2
@@ -234,8 +232,8 @@ class Game(Frame):
         # add items
         r3.addItem("bookshelves", "One shelf has its books organized by series.\nAnother shelf is filled with knick-knacks. The others are empty.")
         # may add knick-knacks to be picked up
-        r3.addItem("statue", "You're unsure whether it's supposed to be a Greek bust, or if something knocked its head off.")
-        r3.addItem("desk", "A faded red journal rests upon the mahogany\nsurface.") # there should be a read option, so that you can gaze upon cryptic recipes for beer.
+        r3.addItem("mannequin", "You're unsure whether it came like that, or if somebody knocked the limbs off.")
+        r3.addItem("desk", "A faded red journal rests upon the surface.") # there should be a read option, so that you can gaze upon cryptic recipes for beer.
                 
         # adds exits to room 4
         r4.addExit("north", r2)
@@ -246,7 +244,7 @@ class Game(Frame):
         r4.addGrabbable("6-pack")
         # add items
         r4.addItem("brew_rig", "You have no idea how to brew anything, but now\nyou know whose house you've broken into. A 6-pack of some experimental batch is resting beside it. This is what you came for.")
-        r4.addItem("painting", "The painting is of a gray-haired fellow, his head surrounded by a golden halo. The background is of a cloudy\nsky. You know very well that this is a depiction of Our Gourd and Savior.")
+        r4.addItem("painting", "The painting is of a gray-haired fellow, his head surrounded by a golden halo. The background is of a cloudy sky. You know very well that this is a depiction of Our Gourd and Savior.")
         r4.addItem("ladder", "It's a metal ladder, bolted to the left wall.")
         r4.addItem("window", "It's an open window on the far side of the room. You should really watch your step.")
         
@@ -267,21 +265,14 @@ class Game(Frame):
         # items to r7 - Santiago
         r7.addItem("box", "It's a small, wooden box atop a pedestal.\nYou're pretty sure it used to hold cigars.\nIt is locked.")
         r7.addItem("overhead_lamp", "A large lamp hangs over the pedestal.")
-
-        
+     
         # r8 now - Santiago
         r8.addExit("down", r4)
-        r8.addExit("west", r9)
         r8.addExit("south", r10)
         # item
         r8.addItem("flag", "It's a flag with a maple leaf. You wonder where the hockey sticks and poutine are at.")
-        
-        # to r9 - Santiago
-        r9.addExit("east", r8)
-        #item
-        r9.addItem("rock", "It's a small, round stone laying on the wooden\nfloor. If you flip it over, you can see that someone\npainted a face on it. Either way, it's excellent for throwing at things, especially things that tear.")
-        # grabbable
-        r9.addGrabbable("rock")
+        r8.addItem("rock", "It's a small, round stone laying on the wooden\nfloor. If you flip it over, you can see that someone\npainted a face on it. Either way, it's excellent for throwing at things, especially things that tear.")
+        r8.addGrabbable("rock")
         
         # last part of the attic - Santiago
         r10.addExit("north", r8)
@@ -351,12 +342,12 @@ class Game(Frame):
         Game.text.delete("1.0", END)
         if (Game.currentRoom == None):
             # if dead, let player know
-            Game.text.insert(END, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nYou've met with a terrible fate, haven't you?\n\nType yes to try again, or close out of the\nwindow to quit.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+            Game.text.insert(END, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nYou've met with a terrible fate, haven't you?\n\nType yes to try again, or close out of the\nwindow to quit.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         # bad ending, good ending - Santiago
         if (Game.currentRoom == r11):
-            Game.text.insert(END, "\n\n\n\n\n\n\n\n\n\n\n\nYou may have the beer, but you didn't think to\nlook down the ladder before descending.\n\nYou're now being driven off in a cop car on a number of charges.\n\nNeedless to say, this sucks.\n\nIt could've gone better, don't you think?\n\n(type yes to start over, or close out the window to quit)")
+            Game.text.insert(END, "\n\n\n\n\n\n\n\n\n\n\nYou may have the beer, but you didn't think to\nlook down the ladder before descending.\n\nYou're now being driven off in a cop car on a\nnumber of charges.\n\nNeedless to say, this sucks.\n\nIt could've gone better, don't you think?\n\n(type yes to start over, or close out the window to quit)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         if (Game.currentRoom == r15):
-            Game.text.insert(END, "\n\n\n\n\n\n\n\n\n\n\n\nYou've made it out of Dr. Gourd's house with the 6-pack of the experimental brew.\n\nThe party shall go on.\n\nCongratulations.\n\nHope you didn't miss anything cool on the way out.\n\n(type yes to start over, or close out the window to quit)")
+            Game.text.insert(END, "\n\n\n\n\n\n\n\n\n\n\nYou've made it out of Dr. Gourd's house with the 6-pack of the experimental brew.\n\nThe party shall go\non.\n\nCongratulations.\n\nHope you didn't miss anything cool on the way out.\n\n(type yes to start over, or close out the window to quit)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         else:
             # display appropriate status
             Game.text.insert(END, str(Game.currentRoom) +\
@@ -382,7 +373,7 @@ class Game(Frame):
         # to compare verb and noun to known values
         action = action.lower()
         # default response
-        response = "I don't understand. Try the format <verb> <noun>. Valid verbs are go, look, take, and kick.\nType help me for more assistance. To quit, close out of the window." ### I added a help response -Aguillard
+        response = "I don't understand. Try the format <verb> <noun>. Valid verbs are go, look, take, kick, use, and read.\nType help me for more assistance. To quit, close out of the window." ### I added a help response -Aguillard
                       
         # exit the game if player wants to leave
         # supports quit, exit, and bye, felicia
@@ -402,8 +393,7 @@ class Game(Frame):
         # game only understands two-word inputs
         if (len(words) == 2):
             verb = words[0]
-            noun = words[1]
-            
+            noun = words[1]            
             # verb is: go
             if (verb == "go"):
                 response = "Invalid exit."
@@ -446,7 +436,7 @@ class Game(Frame):
                             Game.currentRoom.addItem("table", "Nothing lays upon the mahogany surface.")                         
                             r7.addUsable("key")
                         if (Game.currentRoom == r3):
-                            Game.currentRoom.delItem("desk", "A faded red journal rests upon the mahogany surface.")
+                            Game.currentRoom.delItem("desk", "A faded red journal rests upon the surface.")
                             Game.currentRoom.addItem("desk", "The desk is bare.")
                             r2.delItem("fireplace", "It's a stone fireplace, with nothing but ashes in it. There is currently no fire lit.")
                             r2.addItem("fireplace", "It's still a stone fireplace, but where there\nwere only ashes, there is now a roaring fire.")
@@ -454,16 +444,14 @@ class Game(Frame):
                             r2.addReadable("journal")
                             r3.addReadable("journal")
                             r4.addReadable("journal")
-                            r5.addReadable("journal")
-                            r7.addReadable("journal")
                             r8.addReadable("journal")
-                            r9.addReadable("journal")
                             r10.addReadable("journal")
+                            r6.addUsable("journal")
                         if (Game.currentRoom == r4):
                             r3.delItem("bookshelves", "One shelf has its books organized by series.\nAnother shelf is filled with knick-knacks. The others are empty.")
-                            r3.addItem("bookshelves", "One shelf has its books organized by series.\nAnother shelf is filled with knick-knacks. However, one of the empty shelves now has a laptop on it.")
+                            r3.addItem("bookshelves", "One shelf has its books organized by series.\nAnother shelf is filled with knick-knacks. One of the empty shelves has a laptop on it.")
+                            r3.addItem("laptop", "A powered-off laptop sits on the shelf. The battery's been ripped out.")
                             # laptop is gonna be an item now. The USB drive allows it to be used, if only once - Santiago
-                            r3.addItem("laptop", "It's a slick personal computer on the lock screen. You don't know the password, but you could find something to let you in.")
                             Game.currentRoom.delItem("brew_rig", "You have no idea how to brew anything, but now\nyou know whose house you've broken into. A 6-pack of some experimental batch is resting beside it. This is what you came for.")
                             Game.currentRoom.addItem("brew_rig", "You still don't know how to brew beer, but you've already taken the fruits of its labors.")
                             r10.delExit("south", None)
@@ -471,10 +459,9 @@ class Game(Frame):
                             r14.addExit("north", r15)
                             response = "You hear a thud from the west of you, followed by footsteps. Finally, you hear another door slam\nshut. Somebody else is here as well."
                         if (Game.currentRoom == r7):
-                            Game.currentRoom.delItem("flash_drive", "The proper name for this object is a USB drive. You can plug it into a computer.")
-                            Game.currentRoom.delGrabbable("flash_drive")
-                            r3.addUsable("flash_drive")
-                        if (Game.currentRoom == r9):
+                            Game.currentRoom.addItem("picture", "It's a picture of Dr. Box. You feel like others would understand it more than you do.")
+                            Game.currentRoom.addGrabbable("picture")
+                        if (Game.currentRoom == r8):
                             Game.currentRoom.delItem("rock", "It's a small, round stone laying on the wooden\nfloor. If you flip it over, you can see that someone\npainted a face on it. Either way, it's excellent for throwing at things, especially things that tear.")
                             r6.addUsable("rock")
                         break
@@ -499,30 +486,34 @@ class Game(Frame):
                         Game.currentRoom.delUsable(usable)
                         Game.inventory.remove(usable)
                         if (Game.currentRoom == r7):
-                            response = "You have unlocked the wooden box. Inside of it is a flash_drive, a tiny picture of Dr. Box, and some of his photography."
+                            response = "You have unlocked the wooden box. Inside of it is a tiny picture of Dr. Box, and some of his\nphotography."
                             Game.currentRoom.delItem("box", "It's a small, wooden box atop a pedestal.\nYou're pretty sure it used to hold cigars.\nIt is locked.")
                             Game.currentRoom.addItem("box", "It's an unlocked cigar box.")
-                            Game.currentRoom.addItem("flash_drive", "The proper name for this object is a USB drive. You can plug it into a computer.")
-                            Game.currentRoom.addGrabbable("flash_drive")
+                            Game.currentRoom.addItem("picture", "It's a picture of Dr. Box. You feel like others would understand it more than you do.")
+                            Game.currentRoom.addGrabbable("picture")
                         if (Game.currentRoom == r6):
                             Game.currentRoom.delItem("old_poster",  "It's an old poster of Dominique Wilkins. It's stuck to the wall with glue. You think you can hear the wind blowing behind it. You could use something to tear it.")
-                            Game.currentRoom.addItem("torn_poster", "It's an old poster, torn by the rock you threw. A draft is blowing the tatters. You can see a dark tunnel behind it.")  
+                            Game.currentRoom.addItem("torn_poster", "It's an old poster, torn by the {} you threw. A draft is blowing the tatters. You can see a dark tunnel behind it.".format(usable))  
                             Game.currentRoom.addExit("north", r12)
-                            response = "You threw the rock at the poster. It went through. You hear it land somewhere beyond the poster."
-                        if (Game.currentRoom == r3 and usable == "flash_drive"):
-                            pass #will do later
-                            # I'll add this stuff later - Santiago
+                            if (usable == "journal"):
+                                r1.delReadable("journal")
+                                r2.delReadable("journal")
+                                r3.delReadable("journal")
+                                r4.delReadable("journal")
+                                r8.delReadable("journal")
+                                r10.delReadable("journal")
+                            response = "You threw the {} at the poster. It went through. You hear it land somewhere beyond the wallspae with a thud.".format(usable)
             elif (verb == "read"):
                 pass #eh, I'll do this later - Santiago
                 response = "You can't read anything here."
                 for readable in Game.currentRoom.readables:
-                    if (noun == readable):
-                        Game.player_input.delete(0, END)
-                        Game.text.insert(END, "You've opened the journal. Want to read? (yes or no)")
-                        if (action == "yes"):
-                            response = "Entry 1: To whoever is reading this, you owe it to yourself to watch this video: 9 1-13 23-15-18-18-9-5-4 1-2-15-21-20 13-25 7-18-1-4-5.\n{}"
-                        # I will also add this later.
-                                                    
+                            response = "Entry 1: To whoever is reading this, you owe it\nto yourself to watch this video: 9 1-13 23-15-18-\n18-9-5-4 1-2-15-21-20 13-25 7-18-1-4-5.\n{}\n"\
+                                        "Entry 13: Don't cry over spilled milk. It could\nhave been beer.\n{}\n"\
+                                        "Entry 24:...I just got lost in thought. It was\nunfamiliar territory.\n{}\n"\
+                                        "Entry 25: I have approximate answers and possible beliefs and different degrees of certainty about different things, "\
+                                        "but I'm not absolutely sure\nabout anything. -- Richard Feynman\n{}\n"\
+                                        "The Volunteer Fire Department could do nothing\nabout the very flagrant deaths of the Baudelaire\ncouple."
+                        # did it. - Santiago
 
             #### Help me function provides more assitance to the user -Aguillard
             ### Also \n formats the text in tkinter to a new line, I went through and made sure the text all fit 
