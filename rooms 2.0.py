@@ -4,6 +4,7 @@
 # Description: Adventure is out there!
 ###########################################################################################
 from Tkinter import *
+import winsound
 
 # the blueprint for a room
 # room class
@@ -444,6 +445,7 @@ class Game(Frame):
                 # check for valid exits
                 if (noun in Game.currentRoom.exits):
                     #change room to one associated with specific exit
+                    winsound.PlaySound("door.wav", winsound.SND_ASYNC)
                     Game.currentRoom =\
                         Game.currentRoom.exits[noun]
                     # response of success
@@ -461,6 +463,8 @@ class Game(Frame):
                 if (noun in Game.currentRoom.items):
                     # if one found, set response to item's description
                     response = Game.currentRoom.items[noun]
+                    if ("6-pack" in Game.inventory):
+                        winsound.PlaySound("footstep.wav", winsound.SND_ASYNC | winsound.SND_LOOP)
             # verb is: take
             elif (verb == "take"):
                 # default response
@@ -496,6 +500,8 @@ class Game(Frame):
                             r10.addReadable("journal")
                             r6.addUsable("journal")
                         if (Game.currentRoom == r4):
+                            winsound.PlaySound("footstep.wav", winsound.SND_NOSTOP)
+                            winsound.PlaySound("door.wav", winsound.SND_ASYNC)
                             r3.delItem("bookshelves", "One shelf has its books organized by series.\nAnother shelf is filled with knick-knacks. The others are empty.")
                             r3.addItem("bookshelves", "One shelf has its books organized by series.\nAnother shelf is filled with knick-knacks. One of the empty shelves has a laptop on it.")
                             r3.addItem("laptop", "A powered-off laptop sits on the shelf. The battery's been ripped out.")
