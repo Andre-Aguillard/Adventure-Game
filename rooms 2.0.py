@@ -418,7 +418,10 @@ class Game(Frame):
         # to compare verb and noun to known values
         action = action.lower()
         # default response
-        response = "I don't understand. Try the format <verb> <noun>. Valid verbs are go, look, take, kick, use, and read.\nType help me for more assistance. To quit, close out of the window." ### I added a help response -Aguillard
+        response = "I don't understand. Try the format <verb> <noun>."\
+                   "Valid verbs are go, look, take, kick, use, and read.\n"\
+                   "Type help me for more assistance. To quit, close out of"\
+                   "the window. Feel free to type 'credits please' at any time." ### I added a help response -Aguillard
                       
         # exit the game if player wants to leave
         # supports quit, exit, and bye, felicia
@@ -615,6 +618,12 @@ class Game(Frame):
                                 "Remember to revisit places you've been. An action you've performed in one" \
                                 "room can cause changes in others. \n" \
                                 "Good luck and have fun!"
+            elif (verb == "credits"):
+                if (noun == "please"):
+                    response = "Special thanks to Eva Dickenson and Brandy\nSolice, "\
+                               "the artists behind the artwork.\n\nAlso, some thanks to "\
+                               "Maddie and Eric, for being\ngood testers and helping "\
+                               "in the search for bugs.\n\nYou guys rock!" 
         # display response to right of GUI
         # display room's image on the left
         # clear player's input
