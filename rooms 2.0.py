@@ -216,7 +216,7 @@ class Game(Frame):
         ########################
         
         #adds initial image to room 1
-        r1.addImage("room1.gif") 
+        r1.addImage("rm1.gif") 
         # adds exits to room 1
         r1.addExit("east", r2) # to the east of room 1 is room 2
         r1.addExit("south", r3)
@@ -254,7 +254,7 @@ class Game(Frame):
         r3.addItem("desk", "A faded red journal rests upon the surface.") # there should be a read option, so that you can gaze upon cryptic recipes for beer.
 
         #Initial image for room 4
-        r4.addImage("room4.gif")        
+        r4.addImage("rm4.gif")        
         # adds exits to room 4
         r4.addExit("north", r2)
         r4.addExit("west", r3)
@@ -313,7 +313,7 @@ class Game(Frame):
         r10.addItem("hockey_stick", "It's a hockey stick, long and curved at the end. Considering you're in the South, and it's about\n80 degrees Fahrenheit outside, you wonder why this is even here.")
 
         #Initial image for room 11
-        r11.addImage("skull.gif")
+        r11.addImage("badend.gif")
         
         #Initial image for room 12 -Aguillard
         r12.addImage("tunnel.gif")
